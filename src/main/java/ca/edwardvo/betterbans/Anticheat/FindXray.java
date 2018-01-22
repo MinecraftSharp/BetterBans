@@ -35,51 +35,9 @@ public class FindXray implements Listener {
         if(block.getType() == Material.DIAMOND_ORE){
             //Get the light level
             int lightLevel = location.getBlock().getLightLevel();
-            //If they are diamonds at low light without night vision (fullbright) start alerts
-            if (lightLevel < 3 && !player.hasPotionEffect(PotionEffectType.NIGHT_VISION)){
-                //Set xray to one, we add to this, and if at zero it will return one
-                Bukkit.getConsoleSender().sendMessage("[BetterBans] " +
-                        playerName + " has mined diamonds in the dark");
-
-                //No of blocks xrayed. This changes.
-                int xray = 1;
-
-                //Add previous attempts
-                if (player.hasMetadata("xray")){
-                    //Get their xray data
-                    MetadataValue xrayAmount = player.getMetadata("xray").get(0);
-                    //Add the the number of diamonds mined in the dark
-                    xray += (Integer) xrayAmount.value();
-                    player.removeMetadata("xray", BetterBans.plugin);
-                    //Stop the previous alert created
-                    ((BukkitTask)player.getMetadata("xrayAlert").get(0).value()).cancel();
-                }
-                //Set the new player data
-                player.setMetadata("xray", new FixedMetadataValue(BetterBans.plugin, xray));
-
-                //Task to alert admins
-                BukkitTask xrayAlert = new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        //TODO: Change this to a permissions message. This is done for debug
-                        Bukkit.broadcastMessage("[BetterBans] " + playerName  + " has mined " +
-                                player.getMetadata("xray").get(0).value() + " diamonds in the dark!");
-                        //Remove data
-                        player.removeMetadata("xray", BetterBans.plugin);
-                        player.removeMetadata("xrayAlert", BetterBans.plugin);
-                        //Creates a honeypot for the player
-                        DoHoneyPot(player);
-                        cancel();
-                    }
-                }.runTaskLater(BetterBans.plugin, 100);
-
-                //Set the metadata if we need to cancel
-                player.setMetadata("xrayAlert", new FixedMetadataValue(BetterBans.plugin, xrayAlert));
-            }
 
             if(block.hasMetadata("honeypot")){
-                Bukkit.getConsoleSender().sendMessage("[BetterBans] " +
-                        playerName + " has mined a honeypot");
+                Bukkit.getConsoleSender().sendMessage("[BetterBans] " + playerName + " has mined a honeypot");
 
                 //No of honeypot blocks xrayed. This changes.
                 int honeypotMined = 1;
@@ -101,8 +59,24 @@ public class FindXray implements Listener {
                     @Override
                     public void run() {
                         //TODO: Change this to a permissions message. This is done for debug
-                        Bukkit.broadcastMessage("[BetterBans] " + playerName  + " has mined " +
+                        Bukkit.broadcastMessage("§c§l[BetterBans]§8§l §c" + playerName  + " has mined " +
                                 player.getMetadata("honeypotMined").get(0).value() + " honeypot diamonds!");
+                        if (player.hasMetadata("honeypotTotal")){
+                            int mined = player.getMetadata("honeypotTotal").get(0).asInt();
+                            player.removeMetadata("honeypotTotal", BetterBans.plugin);
+                            mined += player.getMetadata("honeypotMined").get(0).asInt();
+
+                            player.setMetadata("honeypotTotal", new FixedMetadataValue(BetterBans.plugin, mined));
+
+                            if (mined > 32){
+                                //TODO: Check if auto ban is on. If yes ban them
+
+                                Bukkit.broadcastMessage("§c§l[BetterBans]§8§l §c" + playerName  + " has reached auto-ban amount");
+                            }
+                        }
+                        else{
+                            player.setMetadata("honeypotTotal", new FixedMetadataValue(BetterBans.plugin, player.getMetadata("honeypotMined").get(0).value()));
+                        }
                         //Remove data
                         player.removeMetadata("honeypotMined", BetterBans.plugin);
                         player.removeMetadata("honeypotAlert", BetterBans.plugin);
@@ -115,6 +89,89 @@ public class FindXray implements Listener {
                 //Set the metadata if we need to cancel
                 player.setMetadata("honeypotAlert", new FixedMetadataValue(BetterBans.plugin, honeypotAlert));
             }
+            //This gets called if the player is mining at low light levels
+            //This indicates fullbright
+            else if (lightLevel < 3 && !player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+
+                //Set xray to one, we add to this, and if at zero it will return one
+                Bukkit.getConsoleSender().sendMessage(String.format("[BetterBans] %s has mined diamonds in the dark", playerName));
+
+                //No of blocks xrayed. This changes.
+                int xrayDark= 1;
+
+                //Add previous attempts
+                if (player.hasMetadata("xrayDark")){
+                    //Get their xray data
+                    MetadataValue xrayAmount = player.getMetadata("xrayDark").get(0);
+                    //Add the the number of diamonds mined in the dark
+                    xrayDark += (Integer) xrayAmount.value();
+                    player.removeMetadata("xrayDark", BetterBans.plugin);
+                    //Stop the previous alert created
+                    ((BukkitTask)player.getMetadata("xrayDarkAlert").get(0).value()).cancel();
+                }
+                //Set the new player data
+                player.setMetadata("xrayDark", new FixedMetadataValue(BetterBans.plugin, xrayDark));
+
+                //Task to alert admins
+                BukkitTask xrayAlert = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        //TODO: Change this to a permissions message. This is done for debug
+                        Bukkit.broadcastMessage(String.format("§c§l[BetterBans] §8§l §c%s has mined %s diamonds in the dark!",
+                                playerName, player.getMetadata("xrayDark").get(0).value()));
+                        //Remove data
+                        player.removeMetadata("xrayDark", BetterBans.plugin);
+                        player.removeMetadata("xrayDarkAlert", BetterBans.plugin);
+                        //Creates a honeypot for the player
+                        DoHoneyPot(player);
+                        cancel();
+                    }
+                }.runTaskLater(BetterBans.plugin, 100);
+
+                //Set the metadata if we need to cancel
+                player.setMetadata("xrayDarkAlert", new FixedMetadataValue(BetterBans.plugin, xrayAlert));
+            }
+            //This is the final method of finding out if a user has xray
+            else {
+
+                //Set xray to one, we add to this, and if at zero it will return one
+                Bukkit.getConsoleSender().sendMessage(String.format("[BetterBans] %s has mined diamonds", playerName));
+
+                //No of blocks xrayed. This changes.
+                int xray= 1;
+
+                //Add previous attempts
+                if (player.hasMetadata("xray")){
+                    //Get their xray data
+                    MetadataValue xrayAmount = player.getMetadata("xray").get(0);
+                    //Add the the number of diamonds mined in the dark
+                    xray += (Integer) xrayAmount.value();
+                    player.removeMetadata("xray", BetterBans.plugin);
+                    //Stop the previous alert created
+                    ((BukkitTask)player.getMetadata("xrayAlert").get(0).value()).cancel();
+                }
+                //Set the new player data
+                player.setMetadata("xray", new FixedMetadataValue(BetterBans.plugin, xray));
+
+                //Task to alert admins
+                BukkitTask xrayAlert = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        //TODO: Change this to a permissions message. This is done for debug
+                        Bukkit.broadcastMessage(String.format("§c§l[BetterBans] §8§l §c%s has mined %s diamonds!",
+                                playerName, player.getMetadata("xray").get(0).value()));
+                        //Remove data
+                        player.removeMetadata("xray", BetterBans.plugin);
+                        player.removeMetadata("xrayAlert", BetterBans.plugin);
+                        //Creates a honeypot for the player
+                        DoHoneyPot(player);
+                        cancel();
+                    }
+                }.runTaskLater(BetterBans.plugin, 100);
+
+                //Set the metadata if we need to cancel
+                player.setMetadata("xrayDarkAlert", new FixedMetadataValue(BetterBans.plugin, xrayAlert));
+            }
         }
     }
 
@@ -125,15 +182,19 @@ public class FindXray implements Listener {
         Random rand = new Random();
         //Create diamonds away from player
         double x = rand.nextInt(20) + 5;
+        //Create the y pos of the honeypot
+        //Made so the player must mine away from the honeypot
         double y = 0;
         if (location.getBlockY() > 11){
-            y -= rand.nextInt(4);
+            y -= (rand.nextInt(4) + 3);
         }
         else{
-            y += rand.nextInt(4);
+            y += (rand.nextInt(4) + 3);
         }
-        double z = rand.nextInt(10) + 5;
+        //Create the z cord of the honeypot
+        double z = rand.nextInt(20) + 5;
 
+        //This is only debug
         Bukkit.getConsoleSender().sendMessage("Player at x: " + location.getBlockX() + " y: " +
                 location.getBlockY() + " z: " + location.getBlockZ());
 
@@ -167,20 +228,29 @@ public class FindXray implements Listener {
         SetHoneyPot(diamondVein8);
     }
 
+    //Creates a honeypot at a set location
+    //This block is a diamond ore
     private static void SetHoneyPot(final Location location){
 
+        //Get the original block
         final Material material = location.getBlock().getType();
+        //This runs code after 24000 ticks (20 ticks in a second. Block lasts for 20 min)
         new BukkitRunnable() {
             @Override
             public void run() {
+                //
                 location.getBlock().setType(material);
 
             }
-        }.runTaskLater(BetterBans.plugin, 36000L);
+        }.runTaskLater(BetterBans.plugin, 24000);
 
+        //Create the block
         location.getBlock().setType(Material.DIAMOND_ORE);
-        Bukkit.getConsoleSender().sendMessage("Created honeypot at x:" + location.getBlockX() + " y:" + location.getBlockY() + " z:" + location.getBlockZ());
 
+        //Send a debug message about the honeypot
+        Bukkit.getConsoleSender().sendMessage("[BetterBans] Created honeypot at x:" + location.getBlockX() + " y:" + location.getBlockY() + " z:" + location.getBlockZ());
+
+        //Creates the honeypot
         location.getBlock().setMetadata("honeypot", new FixedMetadataValue(BetterBans.plugin, "true"));
     }
 }

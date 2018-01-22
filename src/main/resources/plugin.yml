@@ -8,3 +8,6 @@ commands:
   dbg:
     description: Used to debug data
     usage: /dbg
+  ban:
+    description: Used to issue ban and tempbans to players
+    usage: /ban <player name>
