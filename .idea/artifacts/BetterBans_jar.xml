@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BetterBans:jar">
+    <output-path>$USER_HOME$/Downloads/plugins</output-path>
+    <root id="archive" name="BetterBans.jar">
+      <element id="module-output" name="BetterBans" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/spigot-api-1.12.2-R0.1-20180109.235003-87.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

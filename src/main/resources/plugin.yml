@@ -1,0 +1,10 @@
+name: BetterBans
+version: 0.1-beta
+main: ca.edwardvo.betterbans.BetterBans
+author: eddy5641
+
+
+commands:
+  dbg:
+    description: Used to debug data
+    usage: /dbg
