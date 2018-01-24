@@ -43,42 +43,45 @@ permissions:
     bb.ipban:
         description: Allows a player to IP ban others
         default: op
-    bb.immune:
-        description: Makes a player unpunishable
-        default: op
-    bb.mute:
-        description: Allows a player to mute/unmute others.
-        default: op
-    bb.checkban:
-        description: Allows a player to check others ban info
-        default: op
-    bb.checkban.self:
-        description: Allows a player to check their own ban info (and warnings)
-        default: true
-    bb.checkip:
-        descriptions: Allows a player to lookup another players IP address
-        default: op
-    bb.dupeip:
-        description: Allows a player to check other accounts that use the same IP address as the given one
+    bb.kick:
+        description: Allows a player to kick others with a reason
         default: op
     bb.warn:
         description: Allows a player to give out warnings to others.
         default: op
-    bb.unwarn:
-        description: Removes the most recent warning from a player
+    bb.rmwarn.nonself:
+        description: Allows a player to remove warnings that are not on themself
+        default: op
+    bb.rmwarn.nself:
+        description: Allows a player to remove warnings that appied to them
+        default: op
+    bb.immune:
+        description: Makes a player unpunishable
+        default: op
+    bb.mute:
+        description: Allows a player issue and remove chat punishments
+        default: op
+    bb.checkpun:
+        description: Allows a player to check any punishments
+        default: true
+    bb.getip:
+        descriptions: Allows a player to get another players IP address
+        default: op
+    bb.dupeip:
+        description: Allows a player to check other accounts that use the same IP address as the given one
         default: op
     bb.clearwarnings:
         description: Allows a player to delete all warnings for a given player.
         default: op
-    bb.kick:
-        description: Allows a player to kick others with a reason
+    bb.lockdown.ip:
+        description: Allows a player to lockdown the server to player ips that have joined the server
         default: op
     bb.lockdown.use:
-        description: Allows a player to use /lockdown on|off.
+        description: Allows a player to lockdown the server
         default: op
     bb.lockdown.bypass:
         description: Allows a player to enter the server if lockdown is enabled
         default: op
-    bb.seesilent:
-        description: Allows a player to see other players using silent ban commands
+    bb.pban:
+        description: Allows a player to make a ban public
         default: op
