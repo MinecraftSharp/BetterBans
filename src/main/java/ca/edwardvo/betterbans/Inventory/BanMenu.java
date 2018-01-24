@@ -99,7 +99,7 @@ public class BanMenu implements CommandExecutor {
                         .setOption(17, new ItemStack(Material.BARRIER, 1), "Cancel", "Noooo, they were good boi");
                 banMenu.open(player);
             }
-            else if (player.isOp() && args.length != 1){
+            else if ((player.isOp() || player.hasPermission("")) && args.length != 1){
                 player.sendRawMessage("§c§l[BetterBans]§8§l §c Incorrect usage.");
                 player.sendRawMessage("/ban <player name>");
                 //Do not return false
