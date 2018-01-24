@@ -27,6 +27,15 @@ Anti-cheats only stop hackers. This functionality is not built in; however, in B
 ## Easy Ban
 Sometimes ban lengths are hard to remember. This plugin solves this with the ban length built in. Moderators, admins and owners only need to select the ban length. If you want to implement increasing ban lengths, BetterBans can do that for you.
 
+Want to specify a custom length (in hours or days or months). Just select the custom ban (commandBlocks)
+
+![Ban Panel](https://i.imgur.com/43fqtt2.png)
+This is the panel shown when /ban is run
+![Custom Length](https://i.imgur.com/TqbuYtl.png)
+This is only shown if a custom ban is selected. In this case the "custom (month)" was selected
+![Ban mode selection](https://i.imgur.com/tHuGfmt.png)
+This is shown at the end, and lets you pick if you want to IP-Ban the player or just ban the UUID
+
 ## Online management
 Joining the server just to ban or unban a player is difficult. Use the webUI to ban or unban a player. Want to punishments to be public? The webUI can show this to players.
 
