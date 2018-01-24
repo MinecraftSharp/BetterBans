@@ -54,6 +54,8 @@ public class FindXray implements Listener {
                 }
                 player.setMetadata("honeypotMined", new FixedMetadataValue(BetterBans.plugin, honeypotMined));
 
+                block.removeMetadata("honeypot", BetterBans.plugin);
+
                 //Task to alert admins
                 BukkitTask honeypotAlert = new BukkitRunnable() {
                     @Override

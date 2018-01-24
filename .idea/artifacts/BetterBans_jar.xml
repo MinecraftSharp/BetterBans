@@ -4,6 +4,7 @@
     <root id="archive" name="BetterBans.jar">
       <element id="module-output" name="BetterBans" />
       <element id="extracted-dir" path="$USER_HOME$/Downloads/spigot-api-1.12.2-R0.1-20180109.235003-87.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: one.util:streamex:0.6.6" />
     </root>
   </artifact>
 </component>

@@ -18,7 +18,9 @@ public class BetterBans extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new FindXray(), plugin);
         Bukkit.getServer().getPluginManager().registerEvents(new Connections(), plugin);
         this.getCommand("dbg").setExecutor(new CommandDebug());
-        this.getCommand("ban").setExecutor(new BanMenu());
+        BanMenu banMenu = new BanMenu();
+        this.getCommand("ban").setExecutor(banMenu);
+        banMenu.Listen();
     }
 
 

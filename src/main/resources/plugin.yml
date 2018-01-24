@@ -11,3 +11,19 @@ commands:
   ban:
     description: Used to issue ban and tempbans to players
     usage: /ban <player name>
+  ban-ip:
+    description: Does the exact same thing as /ban but doesn't show the 2nd menu
+    usage: /ban-ip <player name>
+  banip:
+    description: Bans an ip address
+    usage: /banip <ip address>
+  banlist:
+    description: Lists all bans
+    usage: /banlist
+  findban:
+    description: Finds a ban
+  kick:
+    descrption: Kicks a player from the server
+    usage: /kick
+    usage: /kick <player name>
+depend: [ProtocolLib]

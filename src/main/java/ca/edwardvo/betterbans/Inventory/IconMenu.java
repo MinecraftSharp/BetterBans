@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 //From https://bukkit.org/threads/icon-menu.108342/
-//It works so I will use it
+//TODO: Change this to be more flexible. It works for now
 public class IconMenu implements Listener {
 
     private String name;
